@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/adminLayout}">
+
+<head>
+    <title>Gimnasio Sport - Rutinas</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <section class="my-5">
+        <div class="container">
+
+            <!-- mensajes -->
+            <div th:if="${msgError}" th:text="#{${msgError}}"
+                 class="alert alert-danger" role="alert"></div>
+            <div th:if="${msgExito}" th:text="${msgExito}"
+                 class="alert alert-success" role="alert"></div>
+
+            <!-- título -->
+            <div class="d-flex align-items-center mb-3 flex-wrap">
+                <h3 class="m-0 mr-3">Rutinas</h3>
+                <span class="text-muted" th:if="${socioNombre}" th:text="${socioNombre}"></span>
+            </div>
+
+            <!-- sin rutinas -->
+            <div th:if="${rutinas == null || #lists.isEmpty(rutinas)}"
+                 class="alert alert-secondary">
+                No se registran rutinas para mostrar.
+            </div>
+
+            <!-- tabla rutinas -->
+            <div class="table-responsive"
+                 th:if="${rutinas != null && !#lists.isEmpty(rutinas)}">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Estado</th>
+                        <th>Profesor</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rutina : ${rutinas}">
+                        <td>
+                            <span class="badge bg-primary px-3 py-2" th:text="${rutina.tipo}"></span>
+                        </td>
+                        <td>
+                            <span class="fw-semibold" th:text="${rutina.profesorNombre + ' ' + rutina.profesorApellido}"></span>
+                        </td>
+                        <td th:text="${rutina.fechaInicio}">Fecha de inicio</td>
+                        <td th:text="${rutina.fechaFinalizacion}">Fecha de finalización</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-primary btn-sm ver-detalle">
+                                    <a th:href="@{/rutinas/{rutinaId}(rutinaId=${rutina.id})}"
+                                       class="btn btn-primary btn-sm me-1" title="Ver">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+
+</th:block>
+</body>
+</html>
