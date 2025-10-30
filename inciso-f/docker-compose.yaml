@@ -1,31 +1,19 @@
 services:
   app-gym:
-    build: gym
-    container_name: app-gym
-    mem_limit: 512m
-    ports:
-      - "8080:8080"
+    env_file: ./.env
+    image: agus3112/gym-app:latest
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://gimnasio:5432/gimnasio_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update       
-      SPRING_PROFILES_ACTIVE: prod
-    depends_on:
-      gimnasio:
-        condition: service_healthy
-    restart: always
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
 
   gimnasio:
     image: postgres:16
-    container_name: db-gimnasio
-    mem_limit: 512m
-    ports:
-      - "5433:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: gimnasio_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-gimnasio_db}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -h localhost"]
       interval: 10s
