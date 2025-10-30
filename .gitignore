@@ -37,3 +37,5 @@ build/
 
 ### PDFs generadors
 *.pdf
+
+application.properties
