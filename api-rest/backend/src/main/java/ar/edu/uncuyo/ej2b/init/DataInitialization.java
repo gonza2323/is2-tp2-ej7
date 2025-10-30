@@ -104,7 +104,7 @@ public class DataInitialization implements CommandLineRunner {
                             .numeracion(random.nextInt(1, 10000))
                             .localidadId(randomLocalidadId).build())
                     .email("user" + String.format("%02d", i) + "@example.com")
-                    .clave("PASSWORD" + String.format("%02d", i))
+                    .clave("password" + String.format("%02d", i))
                     .claveConfirmacion("PASSWORD" + String.format("%02d", i))
                     .build());
         }
@@ -144,7 +144,7 @@ public class DataInitialization implements CommandLineRunner {
     @Transactional
     protected void crearAdmin() {
         usuarioService.create(UsuarioCreateDto.builder()
-                .email("admin@gmail.com")
+                .email("admin@example.com")
                 .clave("1234")
                 .claveConfirmacion("1234")
                 .rol(UserRole.ADMIN).build());
