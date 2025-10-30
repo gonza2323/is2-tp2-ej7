@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,18 +25,21 @@ public class AutorController {
     private final AutorMapper autorMapper;
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> buscarAutor(@PathVariable Long id) {
         AutorDto autor = autorService.buscarAutorDto(id);
         return ResponseEntity.ok(autor);
     }
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> listarAutores(Pageable pageable) {
         Page<AutorDto> autores = autorService.listarAutoresDtos(pageable);
         return ResponseEntity.ok(autores);
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> crearAutor(@Valid @RequestBody AutorDto autorDto) {
         Autor autor = autorService.crearAutor(autorDto);
         AutorDto dto = autorMapper.toDto(autor);
@@ -43,12 +47,14 @@ public class AutorController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> listarTodosLosAutores() {
         List<AutorDto> autores = autorService.listarAutoresDtosTodos(Sort.by("apellido"));
         return ResponseEntity.ok(autores);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> modificarAutor(@PathVariable Long id, @Valid @RequestBody AutorDto autorDto) {
         autorDto.setId(id);
         Autor autor = autorService.modificarAutor(autorDto);
@@ -57,6 +63,7 @@ public class AutorController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> eliminarAutor(@PathVariable Long id) {
         autorService.eliminarAutor(id);
         return ResponseEntity.noContent().build();

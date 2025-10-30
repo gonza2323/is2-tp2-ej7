@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,24 +24,28 @@ public class LocalidadController {
     private final LocalidadMapper localidadMapper;
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> buscarLocalidad(@PathVariable Long id) {
         LocalidadDto localidad = localidadService.buscarLocalidadDto(id);
         return ResponseEntity.ok(localidad);
     }
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> listarLocalidades(Pageable pageable) {
         Page<LocalidadDto> localidades = localidadService.listarLocalidadesDtos(pageable);
         return ResponseEntity.ok(localidades);
     }
 
     @GetMapping("/all")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> listarTodasLasLocalidades() {
         List<LocalidadDto> localidades = localidadService.listarLocalidadesDtosTodas(Sort.by("denominacion"));
         return ResponseEntity.ok(localidades);
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> crearLocalidad(@Valid @RequestBody LocalidadDto localidadDto) {
         Localidad localidad = localidadService.crearLocalidad(localidadDto);
         LocalidadDto dto = localidadMapper.toDto(localidad);
@@ -48,6 +53,7 @@ public class LocalidadController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> modificarLocalidad(@PathVariable Long id, @Valid @RequestBody LocalidadDto localidadDto) {
         localidadDto.setId(id);
         Localidad localidad = localidadService.modificarLocalidad(localidadDto);
@@ -56,6 +62,7 @@ public class LocalidadController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> eliminarLocalidad(@PathVariable Long id) {
         localidadService.eliminarLocalidad(id);
         return ResponseEntity.noContent().build();

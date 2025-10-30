@@ -16,9 +16,9 @@ const router = createBrowserRouter([
   {
     path: paths.auth.root,
     element: (
-      // <GuestGuard>
+      <GuestGuard>
         <AuthLayout />
-      // </GuestGuard>
+      </GuestGuard>
     ),
     children: [
       {
@@ -59,9 +59,9 @@ const router = createBrowserRouter([
   {
     path: paths.dashboard.root,
     element: (
-      // <AuthGuard>
+      <AuthGuard>
         <DashboardLayout />
-      // </AuthGuard>
+      </AuthGuard>
     ),
     children: [
       {
@@ -183,64 +183,6 @@ const router = createBrowserRouter([
               //   path: paths.dashboard.management.libros.root + '/:libroId',
               //   element: LazyPage(() => import('@/pages/dashboard/management/libros/detail')),
               // },
-            ],
-          },
-          {
-            path: paths.dashboard.management.proveedores.root,
-            children: [
-              {
-                index: true,
-                path: paths.dashboard.management.proveedores.root,
-                element: <Navigate to={paths.dashboard.management.proveedores.list} replace />,
-              },
-              {
-                path: paths.dashboard.management.proveedores.list,
-                element: LazyPage(() => import('@/pages/dashboard/management/proveedores/list')),
-              },
-              {
-                path: paths.dashboard.management.proveedores.add,
-                element: LazyPage(() => import('@/pages/dashboard/management/proveedores/add')),
-              },
-              {
-                path: paths.dashboard.management.proveedores.root + '/:proveedorId',
-                element: LazyPage(() => import('@/pages/dashboard/management/proveedores/detail')),
-              },
-            ],
-          },
-          {
-            path: paths.dashboard.management.articulos.root,
-            children: [
-              {
-                index: true,
-                path: paths.dashboard.management.articulos.root,
-                element: <Navigate to={paths.dashboard.management.articulos.list} replace />,
-              },
-              {
-                path: paths.dashboard.management.articulos.list,
-                element: LazyPage(() => import('@/pages/dashboard/management/articulos/list')),
-              },
-              {
-                path: paths.dashboard.management.articulos.add,
-                element: LazyPage(() => import('@/pages/dashboard/management/articulos/add')),
-              },
-              {
-                path: paths.dashboard.management.articulos.root + '/:articuloId',
-                element: LazyPage(() => import('@/pages/dashboard/management/articulos/detail')),
-              },
-            ],
-          },
-          {
-            path: paths.dashboard.management.customers.root,
-            children: [
-              {
-                index: true,
-                path: paths.dashboard.management.customers.root,
-                element: <Navigate to={paths.dashboard.management.customers.list} replace />,
-              },
-              {
-                path: paths.dashboard.management.customers.list,
-                element: LazyPage(() => import('@/pages/dashboard/management/customers/list')),
-              },
             ],
           },
         ],

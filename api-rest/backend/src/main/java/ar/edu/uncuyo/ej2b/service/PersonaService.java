@@ -3,9 +3,12 @@ package ar.edu.uncuyo.ej2b.service;
 import ar.edu.uncuyo.ej2b.dto.DomicilioDto;
 import ar.edu.uncuyo.ej2b.dto.LocalidadDto;
 import ar.edu.uncuyo.ej2b.dto.PersonaDto;
+import ar.edu.uncuyo.ej2b.dto.usuario.UsuarioCreateDto;
 import ar.edu.uncuyo.ej2b.entity.Domicilio;
 import ar.edu.uncuyo.ej2b.entity.Localidad;
 import ar.edu.uncuyo.ej2b.entity.Persona;
+import ar.edu.uncuyo.ej2b.entity.Usuario;
+import ar.edu.uncuyo.ej2b.enums.UserRole;
 import ar.edu.uncuyo.ej2b.error.BusinessException;
 import ar.edu.uncuyo.ej2b.mapper.PersonaMapper;
 import ar.edu.uncuyo.ej2b.repository.PersonaRepository;
@@ -26,6 +29,7 @@ public class PersonaService {
     private final LibroService libroService;
     private final DomicilioService domicilioService;
     private final LocalidadService localidadService;
+    private final UsuarioService usuarioService;
 
     @Transactional(readOnly = true)
     public Persona buscarPersona(Long id) {
@@ -58,6 +62,14 @@ public class PersonaService {
 
         Persona persona = personaMapper.toEntity(personaDto);
         persona.setId(null);
+
+        UsuarioCreateDto usuarioDto = UsuarioCreateDto.builder()
+                .email(personaDto.getEmail())
+                .clave(personaDto.getClave())
+                .claveConfirmacion((personaDto.getClaveConfirmacion()))
+                .rol(UserRole.USER).build();
+        Usuario usuario = usuarioService.create(usuarioDto);
+        persona.setUsuario(usuario);
 
         Domicilio domicilio = domicilioService.crearDomicilio(personaDto.getDomicilio());
         if (personaDto.getDomicilio() != null && personaDto.getDomicilio().getLocalidadId() != null) {

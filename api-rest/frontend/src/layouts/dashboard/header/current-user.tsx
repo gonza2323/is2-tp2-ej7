@@ -14,27 +14,31 @@ import { useAuth, useGetAccountInfo, useLogout } from '@/hooks';
 type CurrentUserProps = Omit<AvatarProps, 'src' | 'alt'> & ElementProps<'div', keyof AvatarProps>;
 
 export function CurrentUser(props: CurrentUserProps) {
-  // const { mutate: logout } = useLogout();
-  // const { setIsAuthenticated } = useAuth();
-  // const { data: user } = useGetAccountInfo();
+  const { mutate: logout } = useLogout();
+  const { setIsAuthenticated } = useAuth();
+  const { data: user } = useGetAccountInfo();
 
-  // const handleLogout = () => {
-    // logout({ variables: null }, { onSuccess: () => setIsAuthenticated(false) });
-  // };
+  console.log(user)
+
+  const handleLogout = () => {
+    logout({ variables: null }, { onSuccess: () => setIsAuthenticated(false) });
+  };
 
   return (
     <Menu>
       <Menu.Target>
         <Avatar
           // src={user?.avatarUrl}
-          // alt={user?.nombre ?? 'Current user'}
+          alt={user?.email ?? 'Current user'}
           {...props}
           style={{ cursor: 'pointer', ...props.style }}
         >
-          {/* {user?.nombre.at(0)?.toUpperCase()} */}
-          G
+          {user?.email.at(0)?.toUpperCase()}
         </Avatar>
+
       </Menu.Target>
+      ROL: {user?.rol}
+
       <Menu.Dropdown>
         <Menu.Item leftSection={<PiHeartDuotone size="1rem" color="var(--mantine-color-red-6)" />}>
           Liked posts
@@ -62,8 +66,7 @@ export function CurrentUser(props: CurrentUserProps) {
 
         <Menu.Divider />
 
-        {/* <Menu.Item leftSection={<PiSignOut size="1rem" />} onClick={handleLogout}> */}
-        <Menu.Item leftSection={<PiSignOut size="1rem" />}>
+        <Menu.Item leftSection={<PiSignOut size="1rem" />} onClick={handleLogout}>
           Logout
         </Menu.Item>
       </Menu.Dropdown>
