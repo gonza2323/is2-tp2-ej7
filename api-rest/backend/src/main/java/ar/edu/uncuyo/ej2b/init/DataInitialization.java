@@ -2,13 +2,12 @@ package ar.edu.uncuyo.ej2b.init;
 
 import ar.edu.uncuyo.ej2b.dto.*;
 import ar.edu.uncuyo.ej2b.dto.libro.LibroCreateDto;
+import ar.edu.uncuyo.ej2b.dto.usuario.UsuarioCreateDto;
 import ar.edu.uncuyo.ej2b.entity.Localidad;
+import ar.edu.uncuyo.ej2b.enums.UserRole;
 import ar.edu.uncuyo.ej2b.repository.LocalidadRepository;
 import ar.edu.uncuyo.ej2b.repository.PersonaRepository;
-import ar.edu.uncuyo.ej2b.service.AutorService;
-import ar.edu.uncuyo.ej2b.service.LibroService;
-import ar.edu.uncuyo.ej2b.service.LocalidadService;
-import ar.edu.uncuyo.ej2b.service.PersonaService;
+import ar.edu.uncuyo.ej2b.service.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -34,6 +33,7 @@ public class DataInitialization implements CommandLineRunner {
     final int CANT_LIBROS = 50;
     private final LibroService libroService;
     private final LocalidadRepository localidadRepository;
+    private final UsuarioService usuarioService;
 
 
     @Override
@@ -61,6 +61,7 @@ public class DataInitialization implements CommandLineRunner {
         crearAutores();
         crearPersonas();
         crearLibros();
+        crearAdmin();
 
         // Resetear los permisos
 //        SecurityContextHolder.clearContext();
@@ -102,6 +103,9 @@ public class DataInitialization implements CommandLineRunner {
                             .calle("CALLE " + String.format("%02d", random.nextInt(1, 99)))
                             .numeracion(random.nextInt(1, 10000))
                             .localidadId(randomLocalidadId).build())
+                    .email("user" + String.format("%02d", i) + "@example.com")
+                    .clave("password" + String.format("%02d", i))
+                    .claveConfirmacion("PASSWORD" + String.format("%02d", i))
                     .build());
         }
     }
@@ -135,6 +139,15 @@ public class DataInitialization implements CommandLineRunner {
         }
 
         return new ArrayList<>(ids);
+    }
+
+    @Transactional
+    protected void crearAdmin() {
+        usuarioService.create(UsuarioCreateDto.builder()
+                .email("admin@example.com")
+                .clave("1234")
+                .claveConfirmacion("1234")
+                .rol(UserRole.ADMIN).build());
     }
 
     private LocalDate randomDate(LocalDate start, LocalDate end) {

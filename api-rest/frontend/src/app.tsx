@@ -28,7 +28,7 @@ export function App() {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        {/* <AuthProvider> */}
+        <AuthProvider>
           <MantineProvider theme={theme}>
             <Notifications position="bottom-center" />
             <NavigationProgress />
@@ -36,7 +36,7 @@ export function App() {
               <Router />
             </ModalsProvider>
           </MantineProvider>
-        {/* </AuthProvider> */}
+        </AuthProvider>
       </QueryClientProvider>
     </HelmetProvider>
   );

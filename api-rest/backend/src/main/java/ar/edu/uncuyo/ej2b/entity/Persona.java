@@ -36,4 +36,8 @@ public class Persona {
 
     @OneToMany(mappedBy = "persona", cascade = CascadeType.PERSIST)
     private List<Libro> libros;
+
+    @JoinColumn(nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, optional = false)
+    private Usuario usuario;
 }
