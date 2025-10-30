@@ -7,3 +7,4 @@ COPY ${JAR_FILE} gimnasio-sport.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "gimnasio-sport.jar"]
+
