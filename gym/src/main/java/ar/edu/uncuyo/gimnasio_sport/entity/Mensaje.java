@@ -2,15 +2,14 @@ package ar.edu.uncuyo.gimnasio_sport.entity;
 
 import ar.edu.uncuyo.gimnasio_sport.enums.TipoMensaje;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mensajes")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Mensaje {

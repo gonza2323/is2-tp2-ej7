@@ -3,8 +3,11 @@ package ar.edu.uncuyo.ej2b.init;
 import ar.edu.uncuyo.ej2b.dto.*;
 import ar.edu.uncuyo.ej2b.dto.libro.LibroCreateDto;
 import ar.edu.uncuyo.ej2b.dto.usuario.UsuarioCreateDto;
+import ar.edu.uncuyo.ej2b.entity.Autor;
 import ar.edu.uncuyo.ej2b.entity.Localidad;
+import ar.edu.uncuyo.ej2b.entity.Persona;
 import ar.edu.uncuyo.ej2b.enums.UserRole;
+import ar.edu.uncuyo.ej2b.repository.AutorRepository;
 import ar.edu.uncuyo.ej2b.repository.LocalidadRepository;
 import ar.edu.uncuyo.ej2b.repository.PersonaRepository;
 import ar.edu.uncuyo.ej2b.service.*;
@@ -34,6 +37,7 @@ public class DataInitialization implements CommandLineRunner {
     private final LibroService libroService;
     private final LocalidadRepository localidadRepository;
     private final UsuarioService usuarioService;
+    private final AutorRepository autorRepository;
 
 
     @Override
@@ -105,37 +109,42 @@ public class DataInitialization implements CommandLineRunner {
                             .localidadId(randomLocalidadId).build())
                     .email("user" + String.format("%02d", i) + "@example.com")
                     .clave("password" + String.format("%02d", i))
-                    .claveConfirmacion("PASSWORD" + String.format("%02d", i))
+                    .claveConfirmacion("password" + String.format("%02d", i))
                     .build());
         }
     }
 
     @Transactional
     protected void crearLibros() {
+        List<Persona> personas = personaRepository.findAll();
+        List<Autor> autores = autorRepository.findAll();
+
         for (int i = 1; i < CANT_LIBROS + 1; i++) {
-            crearLibroRandom(i);
+            crearLibroRandom(i, personas, autores);
         }
     }
 
     @Transactional
-    protected void crearLibroRandom(int i) {
+    protected void crearLibroRandom(int i, List<Persona> personas, List<Autor> autores) {
+        long randomPersonaId = personas.get(random.nextInt(personas.size())).getId();
+
         libroService.crearLibro(LibroCreateDto.builder()
                 .titulo("TÍTULO " + String.format("%02d", i))
                 .fecha(random.nextInt(1900, 2025))
                 .paginas(random.nextInt(20, 3000))
                 .genero("GÉNERO " + String.format("%02d", random.nextInt(0, 30)))
-                .personaId(random.nextLong(1, CANT_PERSONAS + 1))
-                .autoresIds(crearListaAutoresIdsRandom())
+                .personaId(randomPersonaId)
+                .autoresIds(crearListaAutoresIdsRandom(autores))
                 .build());
     }
 
-    private List<Long> crearListaAutoresIdsRandom() {
+    private List<Long> crearListaAutoresIdsRandom(List<Autor> autores) {
         int length = random.nextInt(1, 4);
 
         Set<Long> ids = new HashSet<>();
         while (ids.size() < length) {
-            long id = random.nextLong(1, CANT_AUTORES + 1);
-            ids.add(id);
+            long randomAutorId = autores.get(random.nextInt(autores.size())).getId();
+            ids.add(randomAutorId);
         }
 
         return new ArrayList<>(ids);

@@ -4,6 +4,7 @@
 
     <h3 th:text="${title}" class="text-heading">TÍTULO</h3>
     <form th:action="@{${actionUrl}}" th:object="${sucursal}" method="post">
+        <input type="hidden" th:attr="name=${_csrf.parameterName}, value=${_csrf.token}" />
         <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">

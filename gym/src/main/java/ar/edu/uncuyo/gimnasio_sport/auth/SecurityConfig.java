@@ -27,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable())
+//                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/fonts/**", "/img/**", "/js/**").permitAll()
                         .requestMatchers("/", "/about", "/blog", "/contact", "/elements",
@@ -59,15 +59,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 )
-                .cors(cors -> cors.disable()
-//                        .configurationSource(request -> {
-//                            var cors = new org.springframework.web.cors.CorsConfiguration();
-//                            cors.setAllowedOrigins(java.util.List.of("http://localhost:8080"));
-//                            cors.setAllowedMethods(java.util.List.of("GET","POST","PUT","DELETE"));
-//                            cors.setAllowedHeaders(java.util.List.of("*"));
-//                            return cors;
-//                        })
-                );
+                .cors(cors -> cors.disable());
 
         if (devAutoLoginFilter != null) {
             http.addFilterBefore(devAutoLoginFilter, UsernamePasswordAuthenticationFilter.class);

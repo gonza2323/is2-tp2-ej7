@@ -23,6 +23,7 @@
                 <a th:href="@{/valoresCuota/alta}" class="genric-btn primary radius mr-3">Agregar valor cuota</a>
                 <form th:action="@{/cuotas/emitirCuotasMesActual}" method="post" style="display:inline"
                       th:onsubmit="'return confirm(\'Está seguro de qué desea emitir las cuotas del mes para todos los usuarios?\')'">
+                    <input type="hidden" th:attr="name=${_csrf.parameterName}, value=${_csrf.token}" />
                     <button type="submit" class="genric-btn primary radius">
                         Emitir cuotas del mes
                     </button>
@@ -51,6 +52,7 @@
                             </a>
                             <form th:action="@{/valoresCuota/{id}/baja(id=${valorCuota.id})}" method="post" style="display:inline"
                                   th:onsubmit="'return confirm(\'Está seguro de qué desea borrar este elemento?\')'">
+                                <input type="hidden" th:attr="name=${_csrf.parameterName}, value=${_csrf.token}" />
                                 <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="bi bi-trash"></i>
                                 </button>

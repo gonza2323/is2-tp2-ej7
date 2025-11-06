@@ -6,6 +6,7 @@
 
     <form method="post" th:action="@{${actionUrl}}" th:object="${rutinaForm}">
 
+        <input type="hidden" th:attr="name=${_csrf.parameterName}, value=${_csrf.token}" />
         <input th:field="*{id}" type="hidden"/>
 
         <div class="form-row">
